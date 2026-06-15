@@ -61,6 +61,6 @@ public function read(int id): ?array {
              $Edt = $stmt ->fetch(PDO::FETCH_ASSOC);
              return $Edt ?: null;
 }
-public function 
+public function read(
 }
 
