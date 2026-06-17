@@ -5,20 +5,20 @@ class ProfesseurController {
     private ProfesseurModel $model;
 
     public function __construct() {
-        $this->model = new ProfesseurModel();
+        $this->ProfesseurModel = new ProfesseurModel();
     }
 
     public function index(): void {
         if (isset($_GET['keyword']) && !empty(trim($_GET['keyword']))) {
-            $professeurs = $this->model->search(trim($_GET['keyword']));
+            $professeurs = $this->ProfesseurModel->search(trim($_GET['keyword']));
         } else {
-            $professeurs = $this->model->readAll();
+            $professeurs = $this->ProfesseurModel->readAll();
         }
         require_once "views/professeurs/index.php";
     }
 
     public function show(string $id): void {
-        $professeur = $this->model->read($id);
+        $professeur = $this->ProfesseurModel->read($id);
 
         if (!$professeur) {
             die("Erreur 404 : Ce professeur n'existe pas.");
@@ -36,7 +36,7 @@ class ProfesseurController {
             ];
 
             if (!empty($data['nomProfesseur']) && !empty($data['prenomProfesseur'])) {
-                if ($this->model->create($data)) {
+                if ($this->ProfesseurModel->create($data)) {
                     header("Location: index.php?action=list&success=create");
                     exit();
                 } else {
@@ -50,7 +50,7 @@ class ProfesseurController {
     }
 
     public function edit(string $id): void {
-        $professeur = $this->model->read($id);
+        $professeur = $this->ProfesseurModel->read($id);
         if (!$professeur) {
             die("Erreur : Professeur introuvable.");
         }
@@ -63,7 +63,7 @@ class ProfesseurController {
             ];
 
             if (!empty($data['nomProfesseur']) && !empty($data['prenomProfesseur'])) {
-                if ($this->model->update($id, $data)) {
+                if ($this->ProfesseurModel->update($id, $data)) {
                     header("Location: index.php?action=list&success=update");
                     exit();
                 } else {
