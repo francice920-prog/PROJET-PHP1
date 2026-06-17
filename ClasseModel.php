@@ -3,7 +3,8 @@
  
  require_once 'ConnexionBd.php';    
 class ClasseModel {
-
+    
+    private PDO $pdo;
     private ?string $idclasse;
     private ?string $niveau;
     private ?string $annee;
