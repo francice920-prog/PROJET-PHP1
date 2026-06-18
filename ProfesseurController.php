@@ -1,5 +1,5 @@
 <?php
-require_once "ProfModel.php";
+require_once "ProfesseurModel.php";
 
 class ProfesseurController {
     private ProfesseurModel $ProfesseurModel;
