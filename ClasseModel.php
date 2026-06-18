@@ -21,7 +21,7 @@ public function __construct($idclasse, $annee, $parcours, $groupe) {
     $this->niveau = $niveau;
     
     }
-
+//getters et setters
 public function getIdClasse(): ?string {
         return $this->idclasse;
     }
@@ -55,9 +55,9 @@ public function getIdClasse(): ?string {
     public function getNiveau(): ?string {
         return $this->niveau;
     }
-    //remarque 
+    
     public function setNiveau(string $niveau): void {
-        $niveau = $this->annee . $this->parcours . $this->groupe;
+       $niveau = $this->annee . $this->parcours . $this->groupe; 
         $this->niveau = $niveau;
     }
     
