@@ -1,0 +1,139 @@
+<?php
+
+class EdtController
+{
+    private EdtModel $EdtModel;
+    private ProfModel $ProfModel;
+    private SalleModel $SalleModel;
+    private ClasseModel $ClasseModel;
+
+    public function __construct()
+    {
+        $this->EdtModel = new EdtModel();
+        $this->ProfModel = new ProfModel();
+        $this->SalleModel = new SalleModel();
+        $this->ClasseModel = new ClasseModel();
+    }
+
+    private function checkAuth(): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user'])) {
+            header('Location: index.php?action=login');
+            exit();
+        }
+    }
+
+    // Liste des emplois du temps
+    public function list(): void
+    {
+        $this->checkAuth();
+
+        $Edt = $this->EdtModel->readAll();
+
+        include "views/Edt/list.php";
+    }
+
+    // Ajouter un emploi du temps
+    public function add(): void
+    {
+        $this->checkAuth();
+
+        $Professeurs = $this->ProfModel->readAll();
+        $Salles = $this->SalleModel->readAll();
+        $Classes = $this->ClasseModel->readAll();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $data = [
+                'date'     => $_POST['date'],
+                'idprof'   => $_POST['idprof'],
+                'idsalle'  => $_POST['idsalle'],
+                'idclasse' => $_POST['idclasse'],
+                'cours'    => $_POST['cours']
+            ];
+
+            if ($this->EdtModel->create($data)) {
+                header('Location: index.php?action=listEdt');
+                exit();
+            }
+        }
+
+        include "views/Edt/add.php";
+    }
+
+    // Modifier un emploi du temps
+    public function edit(string $date): void
+    {
+        $this->checkAuth();
+
+        $edt = $this->EdtModel->read($date);
+
+        $Professeurs = $this->ProfModel->readAll();
+        $Salles = $this->SalleModel->readAll();
+        $Classes = $this->ClasseModel->readAll();
+
+        if (!$edt) {
+            die("Emploi du temps introuvable");
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+            $data = [
+                'idprof'   => $_POST['idprof'],
+                'idsalle'  => $_POST['idsalle'],
+                'idclasse' => $_POST['idclasse'],
+                'cours'    => $_POST['cours']
+            ];
+
+            if ($this->EdtModel->update($date, $data)) {
+                header('Location: index.php?action=listEdt');
+                exit();
+            }
+        }
+
+        include "views/Edt/edit.php";
+    }
+
+    // Supprimer un emploi du temps
+    public function delete(string $date): void
+    {
+        $this->checkAuth();
+
+        if ($this->EdtModel->delete($date)) {
+            header('Location: index.php?action=listEdt');
+            exit();
+        }
+    }
+
+    // Recherche
+    public function search(): void
+    {
+        $this->checkAuth();
+
+        $criteria = [];
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+
+            $criteria = [
+                'idsalle'   => $_GET['idsalle'] ?? '',
+                'idprof'    => $_GET['idprof'] ?? '',
+                'idclasse'  => $_GET['idclasse'] ?? '',
+                'dateDebut' => $_GET['dateDebut'] ?? '',
+                'dateFin'   => $_GET['dateFin'] ?? '',
+                'date'      => $_GET['date'] ?? ''
+            ];
+
+            $Edt = $this->EdtModel->search($criteria);
+
+        } else {
+            $Edt = $this->EdtModel->readAll();
+        }
+
+        include "views/Edt/search.php";
+    }
+}
+?>
