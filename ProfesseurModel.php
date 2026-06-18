@@ -19,9 +19,9 @@ class ProfesseurModel {
         return $this->idProfesseur;
     }
     
-    public function setidProfesseur(string $idProfesseur): void {
+  /*  public function setidProfesseur(string $idProfesseur): void {
         $this->idProfesseur = $idProfesseur;
-    }
+    }*/
     
     public function getnomProfesseur(): ?string {
         return $this->nomProfesseur;
