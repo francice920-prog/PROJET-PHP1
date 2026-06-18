@@ -2,7 +2,7 @@
 require_once "ProfModel.php";
 
 class ProfesseurController {
-    private ProfesseurModel $model;
+    private ProfesseurModel $ProfesseurModel;
 
     public function __construct() {
         $this->ProfesseurModel = new ProfesseurModel();
